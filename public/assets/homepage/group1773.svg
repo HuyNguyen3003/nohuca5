@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1773">
+<foreignObject x="-4" y="-4" width="68" height="68"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(2px);clip-path:url(#bgblur_0_4022_8869_clip_path);height:100%;width:100%"></div></foreignObject><path id="Rectangle 1080" data-figma-bg-blur-radius="4" d="M52.2295 0.5L59.5 7.31055V59.5H7.74316L0.5 52.6729V0.5H52.2295Z" fill="var(--fill-0, black)" fill-opacity="0.6" stroke="var(--stroke-0, #484848)" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="layer1">
+<path id="path1009" d="M16.9633 17.1208L27.3015 30.9468L16.8989 42.1883H19.2408L28.3492 32.3467L35.7078 42.1883H43.6758L32.7565 27.5846L42.4397 17.1208H40.0978L31.7104 26.1847L24.9329 17.1208H16.9649H16.9633ZM20.4062 18.8459H24.0659L40.2298 40.4632H36.5701L20.4062 18.8459Z" fill="var(--fill-0, white)"/>
+</g>
+</g>
+<defs>
+<clipPath id="bgblur_0_4022_8869_clip_path" transform="translate(4 4)"><path d="M52.2295 0.5L59.5 7.31055V59.5H7.74316L0.5 52.6729V0.5H52.2295Z"/>
+</clipPath></defs>
+</svg>

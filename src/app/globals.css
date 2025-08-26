@@ -1,0 +1,390 @@
+@import "tailwindcss";
+
+:root {
+  /* Gaming Theme Colors */
+  --color-bg: 15 15 15; /* Dark background */
+  --color-fg: 255 255 255; /* White text */
+  --color-primary: 255 156 13; /* Orange/Gold primary */
+  --color-primary-fg: 0 0 0; /* Black text on orange */
+  --color-secondary: 45 45 45; /* Dark gray secondary */
+  --color-secondary-fg: 255 255 255; /* White text on dark */
+  --color-accent: 255 156 13; /* Orange accent */
+  --color-accent-fg: 0 0 0; /* Black text on accent */
+  --color-muted: 80 80 80; /* Muted gray */
+  --color-muted-fg: 180 180 180; /* Light gray text */
+  --color-border: 255 156 13; /* Orange borders */
+  --color-input: 30 30 30; /* Dark input background */
+  --color-ring: 255 156 13; /* Orange focus ring */
+
+  /* Gaming specific colors */
+  --color-gaming-bg: 20 20 20; /* Main gaming background */
+  --color-gaming-card: 25 25 25; /* Card backgrounds */
+  --color-gaming-gold: 255 156 13; /* Gold/Orange */
+  --color-gaming-dark: 15 15 15; /* Very dark */
+  --color-gaming-border: 255 156 13 / 0.3; /* Subtle orange border */
+
+  /* Status colors for gaming */
+  --color-destructive: 239 68 68;
+  --color-destructive-fg: 255 255 255;
+  --color-success: 34 197 94;
+  --color-success-fg: 255 255 255;
+  --color-warning: 245 158 11;
+  --color-warning-fg: 255 255 255;
+
+  /* Radius */
+  --radius-base: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Fonts */
+  --font-sans: ui-sans-serif, system-ui, "Inter", sans-serif;
+  --font-mono: ui-monospace, "Menlo", "Monaco", "Cascadia Code", monospace;
+
+  /* Gaming shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.25);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4),
+    0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5),
+    0 8px 10px -6px rgb(0 0 0 / 0.5);
+  --shadow-gaming: 0 0 20px rgb(255 156 13 / 0.3);
+}
+
+/* Hacker-style Custom Animations */
+@keyframes glitch {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  10% {
+    transform: translate(-2px, -1px);
+  }
+  20% {
+    transform: translate(2px, 1px);
+  }
+  30% {
+    transform: translate(-1px, 2px);
+  }
+  40% {
+    transform: translate(1px, -1px);
+  }
+  50% {
+    transform: translate(-2px, 1px);
+  }
+  60% {
+    transform: translate(2px, -2px);
+  }
+  70% {
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    transform: translate(1px, 2px);
+  }
+  90% {
+    transform: translate(-2px, -1px);
+  }
+}
+
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(500%);
+    opacity: 0;
+  }
+}
+
+@keyframes cyber-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 5px #ffb200, 0 0 10px #ffb200, 0 0 15px #ffb200;
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 10px #ffb200, 0 0 20px #ffb200, 0 0 30px #ffb200,
+      0 0 40px #00ff41;
+    opacity: 0.8;
+  }
+}
+
+@keyframes data-stream {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes loading-bar {
+  0% {
+    width: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0.5;
+  }
+}
+
+@keyframes neon-flicker {
+  0%,
+  100% {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor,
+      0 0 15px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 2px currentColor, 0 0 5px currentColor,
+      0 0 8px currentColor;
+  }
+}
+
+@keyframes circuit-trace {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hologram-effect {
+  0%,
+  100% {
+    transform: translateY(0px);
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px);
+    filter: hue-rotate(90deg);
+  }
+  50% {
+    transform: translateY(0px);
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    transform: translateY(2px);
+    filter: hue-rotate(270deg);
+  }
+}
+
+/* Animation utility classes */
+.animate-glitch {
+  animation: glitch 0.3s infinite;
+}
+
+.animate-matrix-rain {
+  animation: matrix-rain 3s linear infinite;
+}
+
+.animate-scan-line {
+  animation: scan-line 2s ease-in-out infinite;
+}
+
+.animate-cyber-pulse {
+  animation: cyber-pulse 2s ease-in-out infinite;
+}
+
+.animate-data-stream {
+  animation: data-stream 1.5s ease-in-out infinite;
+}
+
+.animate-loading-bar {
+  animation: loading-bar 3s ease-out;
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 1.5s ease-in-out infinite;
+}
+
+.animate-circuit-trace {
+  animation: circuit-trace 2s ease-in-out;
+}
+
+.animate-hologram {
+  animation: hologram-effect 4s ease-in-out infinite;
+}
+
+/* Glow effects */
+.glow-gold {
+  box-shadow: 0 0 10px #ffb200, 0 0 20px #ffb200, 0 0 30px #ffb200;
+}
+
+.glow-green {
+  box-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41;
+}
+
+.glow-cyan {
+  box-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff, 0 0 30px #00ccff;
+}
+
+.glow-red {
+  box-shadow: 0 0 10px #ff0040, 0 0 20px #ff0040, 0 0 30px #ff0040;
+}
+
+/* Text glow effects */
+.text-glow-gold {
+  text-shadow: 0 0 5px #ffb200, 0 0 10px #ffb200, 0 0 15px #ffb200;
+}
+
+.text-glow-green {
+  text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 15px #00ff41;
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 5px #00ccff, 0 0 10px #00ccff, 0 0 15px #00ccff;
+}
+
+.text-glow-red {
+  text-shadow: 0 0 5px #ff0040, 0 0 10px #ff0040, 0 0 15px #ff0040;
+}
+
+/* Cyberpunk borders */
+.border-cyber {
+  border: 2px solid;
+  border-image: linear-gradient(45deg, #ffb200, #00ff41, #00ccff) 1;
+  position: relative;
+}
+
+.border-cyber::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ffb200, #00ff41, #00ccff);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.3;
+  filter: blur(4px);
+}
+
+/* Loading spinner enhancements */
+.cyber-spinner {
+  border: 4px solid rgba(255, 178, 0, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #ffb200;
+  animation: spin 1s linear infinite, cyber-pulse 2s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@theme inline {
+  --color-background: rgb(var(--color-bg));
+  --color-foreground: rgb(var(--color-fg));
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode colors */
+    --color-bg: 10 10 10;
+    --color-fg: 237 237 237;
+    --color-primary: 129 140 248;
+    --color-primary-fg: 15 23 42;
+    --color-secondary: 31 41 55;
+    --color-secondary-fg: 237 237 237;
+    --color-accent: 251 191 36;
+    --color-accent-fg: 15 23 42;
+    --color-muted: 107 114 128;
+    --color-muted-fg: 156 163 175;
+    --color-border: 55 65 81;
+    --color-input: 31 41 55;
+    --color-ring: 129 140 248;
+
+    /* Dark destructive colors */
+    --color-destructive: 248 113 113;
+    --color-destructive-fg: 15 23 42;
+
+    /* Dark success colors */
+    --color-success: 74 222 128;
+    --color-success-fg: 15 23 42;
+
+    /* Dark warning colors */
+    --color-warning: 251 191 36;
+    --color-warning-fg: 15 23 42;
+  }
+}
+
+body {
+  background: rgb(var(--color-gaming-bg));
+  color: rgb(var(--color-fg));
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ffb200, #905200);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ffd802, #ffb200);
+}

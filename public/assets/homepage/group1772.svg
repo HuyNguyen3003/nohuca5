@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1772">
+<foreignObject x="-4" y="-4" width="68" height="68"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(2px);clip-path:url(#bgblur_0_4022_8844_clip_path);height:100%;width:100%"></div></foreignObject><path id="Rectangle 1079" data-figma-bg-blur-radius="4" d="M52.2295 0.5L59.5 7.31055V59.5H7.74316L0.5 52.6729V0.5H52.2295Z" fill="var(--fill-0, black)" fill-opacity="0.6" stroke="var(--stroke-0, #484848)" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="Group">
+<path id="Vector" d="M30.0352 46H29.9648C21.1619 46 14 38.8381 14 30.0352V29.9648C14 21.1619 21.1619 14 29.9648 14H30.0352C38.8381 14 46 21.1619 46 29.9648V30.0352C46 38.8381 38.8381 46 30.0352 46ZM29.9648 15.0832C21.7587 15.0832 15.0832 21.7587 15.0832 29.9648V30.0352C15.0832 38.2413 21.7587 44.9168 29.9648 44.9168H30.0352C38.2413 44.9168 44.9168 38.2413 44.9168 30.0352V29.9648C44.9168 21.7587 38.2413 15.0832 30.0352 15.0832H29.9648Z" fill="var(--fill-0, #FCFFFC)"/>
+<path id="Vector_2" d="M32.153 26.412V29.7795H36.3188L35.6592 34.3159H32.153V44.7673C31.45 44.8648 30.7308 44.9157 30.0007 44.9157C29.158 44.9157 28.3305 44.8486 27.5246 44.7186V34.3159H23.6826V29.7795H27.5246V25.6592C27.5246 23.1029 29.5967 21.0297 32.1541 21.0297V21.0319C32.1616 21.0319 32.1681 21.0297 32.1757 21.0297H36.3199V24.953H33.612C32.8072 24.953 32.1541 25.6061 32.1541 26.4109L32.153 26.412Z" fill="var(--fill-0, #FCFFFC)"/>
+</g>
+</g>
+<defs>
+<clipPath id="bgblur_0_4022_8844_clip_path" transform="translate(4 4)"><path d="M52.2295 0.5L59.5 7.31055V59.5H7.74316L0.5 52.6729V0.5H52.2295Z"/>
+</clipPath></defs>
+</svg>

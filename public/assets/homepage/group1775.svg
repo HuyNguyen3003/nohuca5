@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1775">
+<foreignObject x="-4" y="-4" width="68" height="68"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(2px);clip-path:url(#bgblur_0_4022_8877_clip_path);height:100%;width:100%"></div></foreignObject><path id="Rectangle 1077" data-figma-bg-blur-radius="4" d="M52.2295 0.5L59.5 7.31055V59.5H7.74316L0.5 52.6729V0.5H52.2295Z" fill="var(--fill-0, black)" fill-opacity="0.6" stroke="var(--stroke-0, #484848)" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Telegram" fill-rule="evenodd" clip-rule="evenodd" d="M39.982 20.1468C41.3351 19.5866 42.7857 20.7116 42.5467 22.1359L39.7248 38.959C39.4527 40.581 37.6408 41.5118 36.1273 40.7034C34.8608 40.0271 32.9817 38.986 31.2882 37.898C30.4426 37.3547 27.8532 35.6125 28.1715 34.3724C28.4436 33.312 32.7966 29.3279 35.2841 26.9585C36.2612 26.0278 35.8162 25.4901 34.6623 26.3471C31.7996 28.4729 27.2038 31.7049 25.684 32.6144C24.343 33.4169 23.6429 33.5539 22.8078 33.4169C21.2828 33.1671 19.8689 32.7802 18.7147 32.3097C17.1545 31.6738 17.2305 29.5658 18.7136 28.9519L39.982 20.1468Z" fill="var(--fill-0, white)"/>
+</g>
+<defs>
+<clipPath id="bgblur_0_4022_8877_clip_path" transform="translate(4 4)"><path d="M52.2295 0.5L59.5 7.31055V59.5H7.74316L0.5 52.6729V0.5H52.2295Z"/>
+</clipPath></defs>
+</svg>
