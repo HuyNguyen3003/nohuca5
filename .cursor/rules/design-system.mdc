@@ -1,0 +1,61 @@
+# Design System Rules
+
+## Color Tokens
+
+Always use CSS variables from [src/app/globals.css](mdc:src/app/globals.css) instead of hardcoded colors:
+
+**✅ DO:**
+
+```tsx
+className = "bg-primary text-primary-foreground";
+className = "border-border";
+className = "text-muted-foreground";
+```
+
+**❌ DON'T:**
+
+```tsx
+className = "bg-[#ff9c0d]";
+className = "text-[#ffffff]";
+```
+
+## Spacing & Layout
+
+Use predefined spacing tokens from CSS variables:
+
+- `--space-1` to `--space-16` → `p-1`, `p-2`, `p-4`, `p-6`, `p-8`, `p-12`, `p-16`
+- `--radius-*` → `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl`
+
+## Component Variants
+
+Use [class-variance-authority (CVA)](mdc:src/components/ui/button.tsx) for component variants:
+
+```tsx
+const variants = cva("base-classes", {
+  variants: {
+    variant: { primary: "bg-primary", secondary: "bg-secondary" },
+    size: { sm: "h-9 px-3", md: "h-10 px-4", lg: "h-11 px-8" },
+  },
+});
+```
+
+## Utility Functions
+
+Always use the `cn()` utility from [src/lib/cn.ts](mdc:src/lib/cn.ts) for merging classes:
+
+```tsx
+import { cn } from "@/lib/cn";
+className={cn("base-classes", conditional && "conditional-classes")}
+```
+
+## Gaming Theme
+
+This is a gaming app with dark theme. Use gaming-specific colors:
+
+- `gaming-bg`, `gaming-card`, `gaming-gold`, `gaming-dark`
+- Orange accent color (`--color-primary: 255 156 13`)
+  description:
+  globs:
+  alwaysApply: true
+
+---

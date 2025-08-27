@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * MCP Figma Wrapper with Error Handling
  * Wrapper around MCP Figma tools to handle 413 errors gracefully

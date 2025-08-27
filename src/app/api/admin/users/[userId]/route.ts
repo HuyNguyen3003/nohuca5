@@ -11,9 +11,10 @@ import { ObjectId } from "mongodb";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     // Get token from Authorization header
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -91,7 +92,7 @@ export async function PUT(
 
     // Find target user
     const targetUser = await usersCollection.findOne({
-      _id: new ObjectId(params.userId) as any,
+      _id: new ObjectId(userId) as any,
     });
 
     if (!targetUser) {
@@ -126,7 +127,7 @@ export async function PUT(
 
     // Update user
     const result = await usersCollection.updateOne(
-      { _id: new ObjectId(params.userId) as any },
+      { _id: new ObjectId(userId) as any },
       {
         $set: {
           ...updateData,
@@ -150,7 +151,7 @@ export async function PUT(
 
     // Get updated user
     const updatedUser = await usersCollection.findOne({
-      _id: new ObjectId(params.userId) as any,
+      _id: new ObjectId(userId) as any,
     });
 
     if (!updatedUser) {
@@ -202,9 +203,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     // Get token from Authorization header
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -261,7 +263,7 @@ export async function DELETE(
     }
 
     // Prevent admin from deleting themselves
-    if (params.userId === currentUser._id?.toString()) {
+    if (userId === currentUser._id?.toString()) {
       return NextResponse.json(
         {
           data: null,
@@ -276,7 +278,7 @@ export async function DELETE(
 
     // Delete user (soft delete by setting isActive = false)
     const result = await usersCollection.updateOne(
-      { _id: new ObjectId(params.userId) as any },
+      { _id: new ObjectId(userId) as any },
       {
         $set: {
           isActive: false,

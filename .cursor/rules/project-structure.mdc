@@ -1,0 +1,43 @@
+# Project Structure Guide
+
+This is a **Next.js 15 Gaming App** with TypeScript, Tailwind CSS, and Figma integration.
+
+## Core Architecture
+
+- **Entry Point**: [src/app/layout.tsx](mdc:src/app/layout.tsx) - Main app layout
+- **Home Page**: [src/app/page.tsx](mdc:src/app/page.tsx) - Landing page
+- **Global Styles**: [src/app/globals.css](mdc:src/app/globals.css) - CSS variables and tokens
+- **Tailwind Config**: [tailwind.config.ts](mdc:tailwind.config.ts) - Design system configuration
+
+## Component Structure
+
+- **UI Components**: [src/components/ui/](mdc:src/components/ui/) - Reusable shadcn/ui components
+- **Screen Components**: [src/components/screens/](mdc:src/components/screens/) - Page-level components
+- **Icons**: [src/components/icons/](mdc:src/components/icons/) - Icon components
+- **Component Index**: [src/components/ui/index.ts](mdc:src/components/ui/index.ts) - UI component exports
+
+## Utility Libraries
+
+- **Class Names**: [src/lib/cn.ts](mdc:src/lib/cn.ts) - `cn()` utility for merging Tailwind classes
+- **Figma Integration**: [src/lib/figma-map.ts](mdc:src/lib/figma-map.ts) - Figma to component mapping
+- **MCP Figma**: [src/lib/mcp-figma-wrapper.ts](mdc:src/lib/mcp-figma-wrapper.ts) - Figma MCP server wrapper
+- **Game Resources**: [src/lib/game-resource-downloader.ts](mdc:src/lib/game-resource-downloader.ts) - Game asset management
+
+## Build & Sync Scripts
+
+- **Figma Sync**: [scripts/sync-figma-optimized.js](mdc:scripts/sync-figma-optimized.js) - Optimized Figma synchronization
+
+## Key Technologies
+
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- shadcn/ui components
+- Radix UI primitives
+- MongoDB (local development)
+- Figma MCP integration
+  description:
+  globs:
+  alwaysApply: true
+
+---

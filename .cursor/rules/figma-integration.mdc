@@ -1,0 +1,75 @@
+# Figma Integration Rules
+
+## Design Token Mapping
+
+Use the mapping utilities from [src/lib/figma-map.ts](mdc:src/lib/figma-map.ts) to convert Figma designs to code:
+
+```tsx
+import {
+  colorMap,
+  fontSizeMap,
+  fontWeightMap,
+  componentMap,
+} from "@/lib/figma-map";
+
+// Map Figma colors to design tokens
+const figmaColor = "primary";
+const tailwindClass = colorMap[figmaColor]; // "bg-primary text-primary-foreground"
+
+// Map Figma text styles
+const figmaFontSize = "lg";
+const tailwindFontSize = fontSizeMap[figmaFontSize]; // "text-lg"
+```
+
+## Component Mapping
+
+Map Figma component names to our UI components:
+
+```tsx
+import { componentMap, buttonVariantMap } from "@/lib/figma-map";
+
+const figmaComponent = "Primary Button";
+const componentName = componentMap[figmaComponent]; // "Button"
+const variant = buttonVariantMap.primary; // "default"
+```
+
+## MCP Figma Integration
+
+Use the MCP wrapper from [src/lib/mcp-figma-wrapper.ts](mdc:src/lib/mcp-figma-wrapper.ts) for automated Figma-to-code conversion.
+
+## Sync Scripts
+
+Run Figma sync scripts when updating designs:
+
+```bash
+# Safe sync (recommended)
+npm run sync:figma:safe
+
+# Full sync
+npm run sync:figma
+
+# Build design tokens
+npm run build:tokens
+```
+
+## Design System Compliance
+
+When converting Figma designs:
+
+1. **First**: Map to existing design tokens in [src/app/globals.css](mdc:src/app/globals.css)
+2. **Second**: Use existing components from [src/components/ui/](mdc:src/components/ui/)
+3. **Third**: Create new components following the established patterns
+4. **Never**: Hardcode colors, spacing, or fonts
+
+## Gaming Theme Consistency
+
+Ensure all Figma imports maintain the gaming aesthetic:
+
+- Dark backgrounds (`gaming-bg`, `gaming-card`)
+- Orange accents (`gaming-gold`)
+- Consistent spacing and typography
+  description:
+  globs:
+  alwaysApply: true
+
+---

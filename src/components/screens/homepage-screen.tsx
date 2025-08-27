@@ -24,56 +24,56 @@ const providerData = [
   {
     id: "qq88",
     name: "QQ88",
-    percentage: 88,
+    percentage: 60,
     image: "/assets/homepage/provider2.png",
     color: "#ff0040",
   },
   {
     id: "jun88",
     name: "Jun88",
-    percentage: 90,
+    percentage: 65,
     image: "/assets/homepage/provider3.png",
     color: "#00ccff",
   },
   {
     id: "ww88",
     name: "WW88",
-    percentage: 80,
+    percentage: 47,
     image: "/assets/homepage/provider4.png",
     color: "#ffb200",
   },
   {
     id: "mb66",
     name: "MB66",
-    percentage: 72,
+    percentage: 50,
     image: "/assets/homepage/provider5.png",
     color: "#ff6600",
   },
   {
     id: "hi88",
     name: "Hi88",
-    percentage: 72,
+    percentage: 55,
     image: "/assets/homepage/provider6.png",
     color: "#9900ff",
   },
   {
     id: "bet88",
     name: "BET88",
-    percentage: 68,
+    percentage: 52,
     image: "/assets/homepage/provider7.png",
     color: "#00ff88",
   },
   {
     id: "ae88",
     name: "AE88",
-    percentage: 84,
+    percentage: 58,
     image: "/assets/homepage/provider8.png",
     color: "#ff3366",
   },
   {
     id: "rr88",
     name: "RR88",
-    percentage: 88,
+    percentage: 54,
     image: "/assets/homepage/provider9.png",
     color: "#ffff00",
   },
@@ -173,22 +173,26 @@ const AnimatedPercentage = ({
     requestAnimationFrame(animate);
   }, [isLoaded, targetPercentage, mounted]);
 
-  // Add fluctuation effect when loaded
+  // Add fluctuation effect when loaded - now changes every 3-5 minutes instead of continuously
   useEffect(() => {
     if (!mounted) return;
 
     if (currentPercentage >= targetPercentage) {
-      const fluctuationInterval = setInterval(() => {
-        // Fixed fluctuation pattern instead of random
-        const time = Date.now() / 1000;
-        const fluctuation = Math.sin(time * 2) * 0.3; // Sine wave fluctuation
-        const newValue = targetPercentage + fluctuation;
-        setDisplayPercentage(
-          Math.max(0, Math.min(100, Number(newValue.toFixed(1))))
-        );
-      }, 300); // Fixed interval
+      // Set initial display percentage
+      setDisplayPercentage(targetPercentage);
 
-      return () => clearInterval(fluctuationInterval);
+      // Change percentage every 3-5 minutes (180000-300000ms) instead of every 300ms
+      const changeInterval = setInterval(() => {
+        // Generate a new percentage value within ±5% range of target
+        const variation = (Math.random() - 0.5) * 10; // -5 to +5
+        const newValue = Math.max(
+          0,
+          Math.min(100, targetPercentage + variation)
+        );
+        setDisplayPercentage(Number(newValue.toFixed(1)));
+      }, Math.random() * 120000 + 180000); // Random between 3-5 minutes (180000-300000ms)5
+
+      return () => clearInterval(changeInterval);
     } else {
       setDisplayPercentage(currentPercentage);
     }

@@ -1,0 +1,65 @@
+# Gaming App Development Rules
+
+## Gaming Theme Consistency
+
+Maintain the dark gaming aesthetic throughout the app:
+
+- **Backgrounds**: Use `bg-gaming-bg` for main areas, `bg-gaming-card` for cards
+- **Accents**: Use `bg-gaming-gold` for highlights and CTAs
+- **Borders**: Use `border-gaming-border` for subtle orange borders
+- **Shadows**: Use `shadow-gaming` for orange glow effects
+
+## Game Resource Management
+
+Use the game resource downloader from [src/lib/game-resource-downloader.ts](mdc:src/lib/game-resource-downloader.ts) for:
+
+- Asset downloads
+- Resource caching
+- Progress tracking
+- Error handling
+
+## Gaming Components
+
+Follow the patterns from existing gaming components:
+
+- [src/components/ui/gaming-button.tsx](mdc:src/components/ui/gaming-button.tsx) - Gaming-styled buttons
+- [src/components/ui/gaming-card.tsx](mdc:src/components/ui/gaming-card.tsx) - Gaming card layouts
+- [src/components/ui/points-required-modal.tsx](mdc:src/components/ui/points-required-modal.tsx) - Game mechanics modals
+
+## Animation & Effects
+
+Use the custom animations defined in [src/app/globals.css](mdc:src/app/globals.css):
+
+```css
+/* Glitch effect for gaming elements */
+animation: glitch 0.3s ease-in-out;
+
+/* Matrix rain effect for backgrounds */
+animation: matrix-rain 20s linear infinite;
+```
+
+## Game State Management
+
+- Use React hooks for local game state
+- Consider context for global game state
+- Implement proper loading states for async operations
+- Handle game errors gracefully
+
+## Performance Considerations
+
+- Lazy load game assets
+- Use `next/image` for optimized images
+- Implement proper loading skeletons
+- Cache frequently used game data
+
+## Accessibility
+
+- Provide alt text for game images
+- Use proper ARIA labels for game controls
+- Ensure keyboard navigation works
+- Support screen readers for game content
+  description:
+  globs:
+  alwaysApply: true
+
+---

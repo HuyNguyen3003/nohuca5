@@ -1,0 +1,169 @@
+# Development Workflow Guide
+
+## Creating New Components
+
+### 1. UI Components
+
+Follow the pattern from [src/components/ui/button.tsx](mdc:src/components/ui/button.tsx):
+
+```tsx
+// 1. Import dependencies
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/cn";
+
+// 2. Define variants with CVA
+const componentVariants = cva("base-classes", {
+  variants: {
+    /* ... */
+  },
+  defaultVariants: {
+    /* ... */
+  },
+});
+
+// 3. Create component with forwardRef
+const Component = React.forwardRef<HTMLElement, ComponentProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        className={cn(componentVariants({ className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+
+// 4. Export component and variants
+export { Component, componentVariants };
+```
+
+### 2. Screen Components
+
+Create in [src/components/screens/](mdc:src/components/screens/) for page-level components.
+
+### 3. Icon Components
+
+Add to [src/components/icons/](mdc:src/components/icons/) and export from index.
+
+## Adding New Pages
+
+### 1. App Router Structure
+
+```tsx
+// src/app/new-page/page.tsx
+export default function NewPage() {
+  return (
+    <main className="min-h-screen bg-gaming-bg">{/* Page content */}</main>
+  );
+}
+```
+
+### 2. Layout Files
+
+Create `layout.tsx` for route groups or nested layouts.
+
+### 3. API Routes
+
+Create in `src/app/api/` following the standard response format.
+
+## Design System Updates
+
+### 1. Adding New Colors
+
+1. Add CSS variables to [src/app/globals.css](mdc:src/app/globals.css)
+2. Update [tailwind.config.ts](mdc:tailwind.config.ts)
+3. Add to [src/lib/figma-map.ts](mdc:src/lib/figma-map.ts) if needed
+
+### 2. Adding New Spacing
+
+1. Add to CSS variables: `--space-20: 5rem;`
+2. Update Tailwind config spacing section
+3. Use in components: `p-20`, `m-20`
+
+### 3. Adding New Components
+
+1. Create component following established patterns
+2. Add to [src/components/ui/index.ts](mdc:src/components/ui/index.ts)
+3. Update Figma mapping if applicable
+
+## Figma Integration Workflow
+
+### 1. Sync Design Changes
+
+```bash
+npm run sync:figma:safe  # Safe sync (recommended)
+npm run sync:figma       # Full sync
+```
+
+### 2. Update Design Tokens
+
+```bash
+npm run build:tokens
+```
+
+### 3. Map New Components
+
+Update [src/lib/figma-map.ts](mdc:src/lib/figma-map.ts) with new mappings.
+
+## Testing & Development
+
+### 1. Development Server
+
+```bash
+npm run dev  # Runs on port 3001 with Turbopack
+```
+
+### 2. Building
+
+```bash
+npm run build  # Production build with Turbopack
+```
+
+### 3. Linting
+
+```bash
+npm run lint  # ESLint checking
+```
+
+## Common Patterns
+
+### 1. Conditional Styling
+
+```tsx
+import { cn } from "@/lib/cn";
+
+className={cn(
+  "base-classes",
+  isActive && "bg-primary",
+  isLarge && "p-6",
+  className
+)}
+```
+
+### 2. Component Variants
+
+```tsx
+const variants = cva("base", {
+  variants: {
+    variant: { primary: "bg-primary", secondary: "bg-secondary" },
+    size: { sm: "p-2", md: "p-4", lg: "p-6" },
+  },
+  defaultVariants: { variant: "primary", size: "md" },
+});
+```
+
+### 3. Responsive Design
+
+```tsx
+className = "p-4 md:p-6 lg:p-8";
+className = "text-sm md:text-base lg:text-lg";
+className = "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+```
+
+description:
+globs:
+alwaysApply: true
+
+---

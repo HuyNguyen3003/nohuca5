@@ -4,13 +4,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { GamingCard, GamingCardWithCorners } from "@/components/ui/gaming-card";
 import { GamingButton } from "@/components/ui/gaming-button";
-import {
-  ArrowLeft,
-  TrendingUp,
-  TrendingDown,
-  BarChart3,
-  Users,
-} from "lucide-react";
+import { ArrowLeft, TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
 
 interface GamePlayScreenProps {
   roomName?: string;

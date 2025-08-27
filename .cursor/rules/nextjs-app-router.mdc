@@ -1,0 +1,93 @@
+# Next.js 15 App Router Rules
+
+## File Structure
+
+Follow the App Router convention:
+
+- `src/app/layout.tsx` - Root layout
+- `src/app/page.tsx` - Home page
+- `src/app/(marketing)/` - Route groups
+- `src/app/api/` - API routes
+
+## API Route Pattern
+
+Use the standard response format for API routes:
+
+```tsx
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  try {
+    const data = await fetchData();
+    return NextResponse.json({ data, error: null });
+  } catch (error) {
+    return NextResponse.json(
+      { data: null, error: error.message },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Layout Structure
+
+Follow the pattern from [src/app/layout.tsx](mdc:src/app/layout.tsx):
+
+```tsx
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "App Name",
+  description: "App description",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className="bg-gaming-bg text-foreground">{children}</body>
+    </html>
+  );
+}
+```
+
+## Page Components
+
+Use the pattern from [src/app/page.tsx](mdc:src/app/page.tsx):
+
+```tsx
+export default function Page() {
+  return (
+    <main className="min-h-screen bg-gaming-bg">{/* Page content */}</main>
+  );
+}
+```
+
+## Metadata
+
+Always define proper metadata for SEO:
+
+```tsx
+export const metadata: Metadata = {
+  title: "Page Title | App Name",
+  description: "Page description",
+  keywords: ["gaming", "app"],
+};
+```
+
+## Route Groups
+
+Use route groups for organizing related pages:
+
+- `(marketing)` - Marketing pages
+- `(dashboard)` - Dashboard pages
+- `(auth)` - Authentication pages
+  description:
+  globs:
+  alwaysApply: true
+
+---

@@ -1,0 +1,65 @@
+# TypeScript & React Development Rules
+
+## Component Structure
+
+Follow the pattern from [src/components/ui/button.tsx](mdc:src/components/ui/button.tsx):
+
+```tsx
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/cn";
+
+const componentVariants = cva("base-classes", {
+  variants: {
+    /* ... */
+  },
+  defaultVariants: {
+    /* ... */
+  },
+});
+
+export interface ComponentProps
+  extends React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof componentVariants> {
+  // Additional props
+}
+
+const Component = React.forwardRef<HTMLElement, ComponentProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        className={cn(componentVariants({ className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Component.displayName = "Component";
+
+export { Component, componentVariants };
+```
+
+## TypeScript Best Practices
+
+- Use `React.forwardRef` for components that need refs
+- Always define `displayName` for debugging
+- Use `VariantProps<typeof variants>` for component variants
+- Export both component and variants for flexibility
+
+## Import Patterns
+
+- Use `@/` alias for src imports: `import { cn } from "@/lib/cn"`
+- Import React types: `import type { ComponentProps } from "react"`
+- Use barrel exports from [src/components/ui/index.ts](mdc:src/components/ui/index.ts)
+
+## Component Props
+
+- Extend appropriate HTML element attributes
+- Use `className` prop for styling customization
+- Forward all remaining props with `{...props}`
+  description:
+  globs:
+  alwaysApply: true
+
+---

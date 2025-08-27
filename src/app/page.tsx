@@ -45,11 +45,11 @@ export default function Home() {
     setCurrentScreen("gamePlay");
   };
 
-  const handleLogout = () => {
-    setCurrentScreen("homepage");
-    setSelectedGame("");
-    setSelectedRoom("");
-  };
+  // const handleLogout = () => {
+  //   setCurrentScreen("homepage");
+  //   setSelectedGame("");
+  //   setSelectedRoom("");
+  // };
 
   const handleBack = () => {
     switch (currentScreen) {
@@ -124,8 +124,8 @@ export default function Home() {
 
       {currentScreen === "gameRoom" && (
         <GameRoomScreen
-          gameName={`Game ${selectedGame}`}
-          onRoomSelect={handleRoomSelect}
+          providerId={`${selectedGame}`}
+          onPredict={handleRoomSelect}
           onBack={handleBack}
         />
       )}
