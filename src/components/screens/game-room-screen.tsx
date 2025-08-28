@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { GamingButton } from "@/components/ui/gaming-button";
 import { ArrowLeft } from "lucide-react";
+import AdvancedCyberChart from "@/components/ui/AdvancedCyberChart";
 import {
   getGamesByProvider,
   providerToGames,
@@ -61,6 +62,7 @@ export function GameRoomScreen({
               <div className="mt-1 h-px w-24 bg-gradient-to-r from-yellow-400/70 to-transparent" />
             </div>
           </div>
+
           <div className="hidden md:flex items-center gap-3 font-mono text-xs text-yellow-400/70">
             <span className="inline-flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -68,6 +70,23 @@ export function GameRoomScreen({
             </span>
             <span className="h-3 w-px bg-yellow-400/30" />
             <span>v2.2.0</span>
+            {/* Cyber Chart */}
+            <div className="mt-3 relative">
+              <AdvancedCyberChart
+                percentage={100}
+                width={200}
+                height={80}
+                duration={3000}
+                primaryColor="#ff6600"
+                secondaryColor="#ff4400"
+                showGrid={true}
+                showLabels={true}
+                showParticles={true}
+                animationType="ease"
+                dataPoints={50}
+                volatility={0.25}
+              />
+            </div>
           </div>
         </div>
       </header>
@@ -166,32 +185,12 @@ function GameCard({
               <div className="text-xs font-mono text-yellow-400/80">
                 {game.description}
               </div>
-              {/* Percentage ring */}
-              <div className="mt-2 relative h-14 w-14">
-                {/* conic animated ring */}
-                <div
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    backgroundImage:
-                      "conic-gradient(from 0deg, rgba(234,179,8,0.9) 0%, rgba(234,179,8,0.6) 25%, transparent 25%, transparent 75%, rgba(234,179,8,0.6) 75%, rgba(234,179,8,0.9))",
-                    WebkitMask:
-                      "radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0)",
-                    animation: "spin 3s linear infinite",
-                    filter: "drop-shadow(0 0 6px rgba(234,179,8,0.7))",
-                  }}
-                />
-                <div className="absolute inset-1 rounded-full bg-black/85 border border-yellow-400/30 grid place-items-center">
-                  <span className="text-xs font-bold text-yellow-400">
-                    {game.percentage}%
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
         {/* CTA */}
-        <div className="absolute left-1/2 bottom-5 -translate-x-1/2">
+        <div className="absolute left-1/2 bottom-5 -translate-x-1/2 mt-4 pt-4">
           <GamingButton
             variant="gold"
             size="sm"
