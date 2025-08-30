@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Orbitron, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "../hooks/useAuth";
+import { AuthProvider } from "@/hooks/useAuth";
 
-const geistSans = Geist({
+const orbitron = Orbitron({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "HU CA 5 - Gaming Platform",
-  description: "Gaming platform with exciting games and tournaments",
+  title: "NOHU CA-5 - AI-Powered Gaming Platform ",
+  description: "AI-Powered Gaming Platform",
 };
 
 export default function RootLayout({
@@ -24,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -38,7 +40,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${orbitron.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <AuthProvider>{children}</AuthProvider>
       </body>

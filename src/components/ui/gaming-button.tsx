@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 
 const gamingButtonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 uppercase tracking-wider",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm md:text-base font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 md:[&_svg]:size-5 [&_svg]:shrink-0 uppercase tracking-wider",
   {
     variants: {
       variant: {
@@ -22,11 +22,11 @@ const gamingButtonVariants = cva(
         gold: "bg-gradient-to-r from-yellow-400 to-orange-500 text-black hover:from-yellow-300 hover:to-orange-400 border-2 border-yellow-400/50 shadow-gaming",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-8 rounded px-3 text-xs",
-        lg: "h-12 rounded-md px-8 text-base",
-        xl: "h-14 rounded-md px-12 text-lg",
-        icon: "h-10 w-10",
+        default: "h-10 md:h-12 px-4 md:px-6 py-2 md:py-3",
+        sm: "h-8 md:h-10 rounded px-3 md:px-4 text-xs md:text-sm",
+        lg: "h-12 md:h-16 rounded-md px-8 md:px-12 text-base md:text-lg",
+        xl: "h-14 md:h-20 rounded-md px-12 md:px-16 text-lg md:text-xl",
+        icon: "h-10 w-10 md:h-12 md:w-12",
       },
     },
     defaultVariants: {

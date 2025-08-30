@@ -9,7 +9,7 @@ import {
   FileText,
   Package,
   Database,
-  Image,
+  Image as ImageIcon,
 } from "lucide-react";
 import { GamingButton } from "@/components/ui/gaming-button";
 import { GamingCard } from "@/components/ui/gaming-card";
@@ -31,7 +31,7 @@ const getResourceIcon = (type: GameResource["type"]) => {
     case "config":
       return <FileText className="w-4 h-4" />;
     case "assets":
-      return <Image className="w-4 h-4" />;
+      return <ImageIcon className="w-4 h-4" aria-hidden="true" />;
     case "data":
       return <Database className="w-4 h-4" />;
     case "package":
@@ -155,7 +155,10 @@ export function ResourceDownloadModal({
           <div className="flex-1 overflow-y-auto p-6">
             {resources.length === 0 ? (
               <div className="text-center py-12">
-                <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                <Package
+                  className="w-16 h-16 text-muted-foreground mx-auto mb-4"
+                  aria-hidden="true"
+                />
                 <h3 className="text-xl font-semibold text-foreground mb-2">
                   Không có tài nguyên
                 </h3>

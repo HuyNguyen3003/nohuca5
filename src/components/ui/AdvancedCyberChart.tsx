@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
 interface AdvancedCyberChartProps {
-  percentage: number;
   width?: number;
   height?: number;
   duration?: number;
@@ -18,9 +17,8 @@ interface AdvancedCyberChartProps {
 }
 
 export default function AdvancedCyberChart({
-  percentage,
   width = 240,
-  height = 100,
+  height = 120,
   duration = 4000,
   primaryColor = "#ff6600",
   secondaryColor = "#ff4400",
@@ -32,6 +30,7 @@ export default function AdvancedCyberChart({
 }: AdvancedCyberChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [latency, setLatency] = useState<number>(0);
   // const [animationProgress, setAnimationProgress] = useState(0);
   // Rolling data buffer for live, stock-like movement
   const dataRef = useRef<number[]>([]);
@@ -45,6 +44,25 @@ export default function AdvancedCyberChart({
       maxLife: number;
     }[]
   >([]);
+
+  useEffect(() => {
+    const updateLatency = () => {
+      // Replace this with real ping logic if available
+      const ms = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
+      setLatency(ms);
+    };
+
+    updateLatency();
+    const interval = setInterval(updateLatency, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Determine color based on value
+  const getColor = (ms: number) => {
+    if (ms < 50) return "text-green-400";
+    if (ms < 100) return "text-yellow-400";
+    return "text-red-400";
+  };
 
   // Easing removed for live mode
 
@@ -61,7 +79,7 @@ export default function AdvancedCyberChart({
         // Create multiple trend components
         const mainTrend = targetProgress * Math.pow(progress, 0.8);
         const secondaryTrend = Math.sin(progress * Math.PI * 2) * 0.05;
-        const noise = (Math.random() - 0.5) * volatility;
+        const noise = (Math.random() - 0.5) * volatility * 0.3;
         const volatilityWave =
           Math.sin(progress * Math.PI * 4) * volatility * 0.2;
 
@@ -275,13 +293,18 @@ export default function AdvancedCyberChart({
     canvas.height = height;
 
     // Initialize rolling buffer
-    dataRef.current = generateDataPoints(percentage);
+    dataRef.current = generateDataPoints(50);
 
     let animationFrame: number;
     let lastUpdate = performance.now();
     const intervalMs = Math.max(20, Math.min(120, Math.floor(duration / 40))); // speed derived from duration
+    let running = true;
 
     const animate = (now: number) => {
+      if (document.hidden) {
+        animationFrame = requestAnimationFrame(animate);
+        return;
+      }
       const dt = now - lastUpdate;
 
       // Advance data at fixed cadence for smooth movement
@@ -289,19 +312,21 @@ export default function AdvancedCyberChart({
         lastUpdate = now;
 
         const buffer = dataRef.current;
-        const last = buffer[buffer.length - 1] ?? percentage / 100;
-        const target = percentage / 100;
+        const last = buffer[buffer.length - 1] ?? 50 / 100;
+        const target = 50 / 100;
 
         // Drift towards target with multi-wave oscillation and noise
         const timeFactor = now * 0.001;
         const drift = (target - last) * 0.06; // gentle pull towards target
         const wave =
-          0.06 * Math.sin(timeFactor * 2.1) +
-          0.04 * Math.sin(timeFactor * 1.1 + 1.3) +
-          0.02 * Math.sin(timeFactor * 3.7 + 0.7);
+          0.12 * Math.sin(timeFactor * 2.1) +
+          0.08 * Math.sin(timeFactor * 1.1 + 1.3) +
+          0.04 * Math.sin(timeFactor * 3.7 + 0.7);
         const noise = (Math.random() - 0.5) * volatility * 0.12;
         let next = last + drift + wave + noise;
-        next = Math.max(0.05, Math.min(0.98, next));
+
+        const spike = (Math.random() - 0.5) * volatility * 1.5;
+        next = Math.max(0, Math.min(1, next + spike));
 
         // Rolling window: push new, drop oldest
         buffer.push(next);
@@ -334,17 +359,17 @@ export default function AdvancedCyberChart({
         }
       }
 
-      animationFrame = requestAnimationFrame(animate);
+      if (running) animationFrame = requestAnimationFrame(animate);
     };
 
     setIsAnimating(true);
     animationFrame = requestAnimationFrame(animate);
 
     return () => {
+      running = false;
       if (animationFrame) cancelAnimationFrame(animationFrame);
     };
   }, [
-    percentage,
     width,
     height,
     duration,
@@ -372,30 +397,27 @@ export default function AdvancedCyberChart({
 
       {/* Enhanced loading indicator */}
       {isAnimating && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded backdrop-blur-sm">
-          <div className="flex flex-col items-center space-y-2">
-            <div className="w-6 h-6 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
-            <div className="text-xs text-orange-400 font-mono">LIVE</div>
-          </div>
-        </div>
+        <div className="absolute inset-0 items-center justify-center bg-black/10 rounded backdrop-blur-none"></div>
       )}
 
       {/* Enhanced labels */}
       {showLabels && (
         <>
-          <div className="absolute bottom-0 left-0 px-3 py-1 bg-gradient-to-r from-orange-600/90 to-orange-500/90 text-white text-xs font-mono rounded shadow-lg">
-            LIVE
-          </div>
-          <div className="absolute bottom-0 right-0 px-3 py-1 bg-gradient-to-r from-orange-500/90 to-orange-600/90 text-white text-xs font-mono rounded shadow-lg">
-            Date: {new Date().toLocaleDateString("vi-VN")}
+          <div className="absolute bottom-0 left-0 px-3 py-1 bg-black/60 backdrop-blur-lg rounded-tr-lg shadow-sm text-sm font-semibold text-white drop-shadow-md">
+            PING: {new Date().toLocaleDateString("vi-VN")} | REF SESSION:{" "}
+            {new Date().getTime() * latency}
           </div>
         </>
       )}
 
       {/* Progress indicator with spinning circle */}
-      <div className="absolute top-2 right-2 px-2 py-1 bg-black/50 text-orange-400 text-xs font-mono rounded flex items-center gap-2">
-        <div className="w-3 h-3 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
-        <span>{percentage}%</span>
+      <div className="absolute top-0 left-0 px-3 py-1 bg-black/60 text-xs font-mono rounded-lg flex items-center gap-2 shadow-lg backdrop-blur">
+        <div
+          className={`w-4 h-4 border-2 rounded-full animate-spin border-t-transparent border-white/50`}
+        />
+        <span className={`${getColor(latency)} font-bold`}>
+          {latency} <span className="text-white/80">ms</span>
+        </span>
       </div>
     </div>
   );

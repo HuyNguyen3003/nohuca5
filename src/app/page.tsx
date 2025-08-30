@@ -19,7 +19,6 @@ type Screen =
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("homepage");
   const [selectedGame, setSelectedGame] = useState<string>("");
-  const [selectedRoom, setSelectedRoom] = useState<string>("");
 
   const handleLogin = () => {
     setCurrentScreen("login");
@@ -30,7 +29,6 @@ export default function Home() {
   };
 
   const handleProviderSelect = (providerId: string) => {
-    console.log("Provider selected:", providerId);
     setSelectedGame(providerId);
     setCurrentScreen("gameSelection");
   };
@@ -40,16 +38,9 @@ export default function Home() {
     setCurrentScreen("gameRoom");
   };
 
-  const handleRoomSelect = (roomId: string) => {
-    setSelectedRoom(roomId);
+  const handleRoomSelect = () => {
     setCurrentScreen("gamePlay");
   };
-
-  // const handleLogout = () => {
-  //   setCurrentScreen("homepage");
-  //   setSelectedGame("");
-  //   setSelectedRoom("");
-  // };
 
   const handleBack = () => {
     switch (currentScreen) {
@@ -72,12 +63,10 @@ export default function Home() {
   };
 
   const handleLoginSuccess = () => {
-    console.log("Login successful, redirecting to homepage");
     setCurrentScreen("homepage");
   };
 
   const handleRegisterSuccess = () => {
-    console.log("Registration successful, redirecting to homepage");
     setCurrentScreen("homepage");
   };
 
@@ -130,12 +119,7 @@ export default function Home() {
         />
       )}
 
-      {currentScreen === "gamePlay" && (
-        <GamePlayScreen
-          roomName={`Phòng ${selectedRoom}`}
-          onBack={handleBack}
-        />
-      )}
+      {currentScreen === "gamePlay" && <GamePlayScreen onBack={handleBack} />}
     </div>
   );
 }

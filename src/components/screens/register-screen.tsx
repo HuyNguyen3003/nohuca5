@@ -4,8 +4,8 @@
 import * as React from "react";
 import { useState } from "react";
 import Image from "next/image";
-import { useAuth } from "../../hooks/useAuth";
-import { RegisterInput, registerSchema } from "../../../lib/auth-schemas";
+import { useAuth } from "@/hooks/useAuth";
+import { RegisterInput, registerSchema } from "@/lib/auth-schemas";
 
 interface RegisterScreenProps {
   onLogin?: () => void;
@@ -72,7 +72,7 @@ export function RegisterScreen({
       } else {
         setErrors({ general: result.error || "Đăng ký thất bại" });
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: "Lỗi kết nối, vui lòng thử lại" });
     } finally {
       setIsLoading(false);

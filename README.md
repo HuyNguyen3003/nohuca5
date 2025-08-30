@@ -204,6 +204,24 @@ pnpm dev
 - MCP sinh code chưa chuẩn variant? → thêm mapping trong `lib/figma-map.ts`.
 - Ảnh từ Figma: export vào `public/assets/...` và dùng `next/image`.
 
+## 8. Cyber 3D Enhancements
+
+- Reusable components:
+
+  - `src/components/ui/CyberBackdrop.tsx`: Matrix-style cyber background with FPS cap, tab-visibility pause, mobile opt-out, and reduced-motion compliance.
+  - `src/components/ui/GlitchText.tsx`: Glitch overlay effect, configurable interval.
+  - `src/components/ui/AdvancedCyberChart.tsx` and `src/components/ui/CyberChart.tsx`: Canvas charts with pause on hidden tab.
+
+- Caching and performance:
+
+  - Asset caching headers via `next.config.ts` for long-term immutable caching (images, css, js).
+  - API runtime cache: `lib/cache.ts` (TTL in-memory) used in profile/admin routes.
+  - API headers set with short `max-age` and `stale-while-revalidate` to improve UX.
+
+- Images:
+  - Enabled AVIF/WebP in `next.config.ts`.
+  - Added `sizes` and descriptive `alt` for key images on homepage for better LCP and a11y.
+
 ## 7. Tham chiếu
 
 - **Figma file**: App-Hu-Ca-5-DEV ( https://www.figma.com/design/S2mir453A9r2Xfk8sHh5IJ/App-Hu-Ca-5-DEV?node-id=0-1&m=dev)

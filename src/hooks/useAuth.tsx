@@ -7,8 +7,8 @@ import {
   useContext,
   ReactNode,
 } from "react";
-import { UserProfile, RegisterInput, LoginInput } from "../../lib/auth-schemas";
-import { authStorage } from "../../lib/auth-utils";
+import { UserProfile, RegisterInput, LoginInput } from "@/lib/auth-schemas";
+import { authStorage } from "@/lib/auth-utils";
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -23,6 +23,7 @@ interface AuthContextType {
   ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   checkAuth: () => Promise<void>;
+  adjustPoints: (delta: number, reason?: string) => Promise<number | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -74,8 +75,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         setToken(null);
       }
-    } catch (error) {
-      console.error("Check auth error:", error);
+    } catch {
+      // Log error silently in production
       authStorage.clearAuth();
       setUser(null);
       setToken(null);
@@ -111,7 +112,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       }
     } catch (error) {
-      console.error("Login error:", error);
       return {
         success: false,
         error: "Lỗi kết nối, vui lòng thử lại",
@@ -146,7 +146,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       }
     } catch (error) {
-      console.error("Register error:", error);
       return {
         success: false,
         error: "Lỗi kết nối, vui lòng thử lại",
@@ -169,6 +168,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     register,
     logout,
     checkAuth,
+    adjustPoints: async (delta: number, reason?: string) => {
+      try {
+        const t = authStorage.getToken();
+        if (!t) return null;
+        const res = await fetch("/api/user/points", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${t}`,
+          },
+          body: JSON.stringify({ delta, reason }),
+        });
+        const json = await res.json();
+        if (res.ok && typeof json?.data?.points === "number") {
+          const nextPoints: number = json.data.points as number;
+          setUser((prev) => {
+            if (!prev) return prev;
+            const updated: UserProfile = { ...prev, points: nextPoints };
+            authStorage.setAuth(updated, t);
+            return updated;
+          });
+          return nextPoints;
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    },
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

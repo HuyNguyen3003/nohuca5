@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { getDatabase } from "../../../../../../lib/mongodb";
+import { getDatabase } from "@/lib/mongodb";
 import {
   User,
   UserProfile,
   adminUpdateUserSchema,
-} from "../../../../../../lib/auth-schemas";
-import { verifyToken } from "../../../../../../lib/auth-utils";
+} from "@/lib/auth-schemas";
+import { verifyToken } from "@/lib/auth-utils";
 import { ObjectId } from "mongodb";
 
 export async function PUT(

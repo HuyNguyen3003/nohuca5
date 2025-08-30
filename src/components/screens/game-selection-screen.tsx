@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import { BackButton } from "@/components/ui";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { GameProvider, gameProviders } from "@/data/games";
@@ -331,8 +332,8 @@ export default function GameSelectionScreen({
           }}
         />
 
-        {/* Floating particles */}
-        <div className="absolute inset-0">
+        {/* Floating particles (disabled on mobile for performance) */}
+        <div className="absolute inset-0 hidden md:block">
           {Array.from({ length: 20 }).map((_, i) => (
             <div
               key={i}
@@ -352,17 +353,7 @@ export default function GameSelectionScreen({
       <header className="sticky top-0 z-30 h-[88px] border-b border-orange-400/20 bg-black/80 backdrop-blur-xl">
         <div className="mx-auto flex h-full max-w-[1400px] items-center justify-between  md:px-10">
           <div className="flex items-center gap-4">
-            {/* Logo */}
-            <div className="flex-shrink-0 flex justify-center pt-12 md:pt-16">
-              <button
-                onClick={onBack}
-                className=" w-40 md:h-32 md:w-52 bg-center bg-cover bg-no-repeat hover:scale-105 transition-transform cursor-pointer"
-                style={{
-                  backgroundImage: "url('/assets/login/logo.png')",
-                }}
-                aria-label="Quay về trang chủ"
-              />
-            </div>
+            <BackButton onClick={onBack} variant="ghost" />
             {/* Cyber accent */}
             <div className="h-8 w-[2px] bg-gradient-to-b from-transparent via-orange-400 to-transparent" />
             <div className="font-mono text-sm text-orange-400">v2.1.5</div>

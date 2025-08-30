@@ -1,10 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useAuth } from "../../hooks/useAuth";
-import { PointsRequiredModal } from "../ui/points-required-modal";
+import { useAuth } from "@/hooks/useAuth";
+import { PointsRequiredModal } from "@/components/ui/points-required-modal";
+import CyberBackdrop from "@/components/ui/CyberBackdrop";
+import SystemInitializationOverlay from "@/components/ui/SystemInitializationOverlay";
+import GlitchText from "@/components/ui/GlitchText";
+import ParallaxCyberHero from "@/components/ui/ParallaxCyberHero";
 
 interface HomepageScreenProps {
   onProviderSelect?: (providerId: string) => void;
@@ -80,54 +83,15 @@ const providerData = [
   {
     id: "u888",
     name: "U888",
-    percentage: 82,
+    percentage: 62,
     image: "/assets/homepage/provider10.png",
     color: "#00ffcc",
   },
 ];
 
-// Glitch text effect component
-const GlitchText = ({ children, className = "" }: any) => {
-  const [glitch, setGlitch] = useState(false);
-  const [mounted, setMounted] = useState(false);
+// (removed) Fake cyber logs sequence
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-
-    const interval = setInterval(() => {
-      setGlitch(true);
-      setTimeout(() => setGlitch(false), 100);
-    }, Math.random() * 3000 + 2000);
-
-    return () => clearInterval(interval);
-  }, [mounted]);
-
-  return (
-    <div className={`relative ${className}`}>
-      <div
-        className={`${
-          glitch ? "animate-pulse" : ""
-        } transition-all duration-100`}
-      >
-        {children}
-      </div>
-      {glitch && (
-        <>
-          <div className="absolute inset-0 text-red-500 animate-ping opacity-70 mix-blend-multiply transform translate-x-0.5">
-            {children}
-          </div>
-          <div className="absolute inset-0 text-cyan-500 animate-ping opacity-70 mix-blend-multiply transform -translate-x-0.5">
-            {children}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
+// GlitchText moved to reusable component
 
 // Animated percentage counter with fluctuation
 const AnimatedPercentage = ({
@@ -327,184 +291,7 @@ const CircularProgress = ({
   );
 };
 
-// Matrix rain background effect
-const MatrixRain = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    // Thêm nhiều ký tự hơn để đa dạng
-    const chars =
-      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,.<>?".split(
-        ""
-      );
-    const fontSize = 10; // Giảm kích thước để dày đặc hơn
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops: number[] = [];
-    const speeds: number[] = [];
-    const colors: string[] = [];
-
-    // Khởi tạo mỗi cột với tốc độ và màu sắc khác nhau
-    for (let i = 0; i < columns; i++) {
-      drops[i] = Math.random() * -100; // Bắt đầu ở vị trí ngẫu nhiên
-      speeds[i] = Math.random() * 0.3 + 0.4; // Tốc độ chậm hơn từ 0.4 đến 0.7
-
-      // Tạo màu ngẫu nhiên với gradient cyberpunk
-      const colorChoice = Math.random();
-      if (colorChoice < 0.4) {
-        colors[i] = "#00ff41"; // Matrix green
-      } else if (colorChoice < 0.7) {
-        colors[i] = "#ffb200"; // Gold
-      } else if (colorChoice < 0.85) {
-        colors[i] = "#00ccff"; // Cyan
-      } else {
-        colors[i] = "#ffffff"; // White
-      }
-    }
-
-    function draw() {
-      if (!ctx || !canvas) return;
-
-      // Giảm fade out để ký tự tồn tại lâu hơn và đậm hơn
-      ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Font đậm hơn với weight
-      ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        // Chọn ký tự ngẫu nhiên
-        const charIndex = Math.floor((Date.now() / 100 + i * 7) % chars.length);
-        const text = chars[charIndex];
-
-        // Thiết lập màu với gradient alpha
-        const y = drops[i] * fontSize;
-        const alpha = Math.max(0.3, 1 - (y / canvas.height) * 0.6); // Tăng alpha minimum
-
-        // Vẽ outline đậm trước
-        ctx.strokeStyle =
-          colors[i] +
-          Math.floor(alpha * 255)
-            .toString(16)
-            .padStart(2, "0");
-        ctx.lineWidth = 1.5;
-        ctx.strokeText(text, i * fontSize, y);
-
-        // Tạo hiệu ứng glow mạnh hơn
-        ctx.shadowColor = colors[i];
-        ctx.shadowBlur = 12;
-        ctx.fillStyle =
-          colors[i] +
-          Math.floor(alpha * 255)
-            .toString(16)
-            .padStart(2, "0");
-
-        ctx.fillText(text, i * fontSize, y);
-
-        // Vẽ thêm lớp glow effect thứ 2 đậm hơn
-        ctx.shadowBlur = 20;
-        ctx.fillStyle =
-          colors[i] +
-          Math.floor(alpha * 180)
-            .toString(16)
-            .padStart(2, "0");
-        ctx.fillText(text, i * fontSize, y);
-
-        // Vẽ thêm lớp glow effect thứ 3 cho độ đậm
-        ctx.shadowBlur = 25;
-        ctx.fillStyle =
-          colors[i] +
-          Math.floor(alpha * 100)
-            .toString(16)
-            .padStart(2, "0");
-        ctx.fillText(text, i * fontSize, y);
-
-        // Reset shadow
-        ctx.shadowBlur = 0;
-
-        // Di chuyển drop xuống với tốc độ riêng
-        drops[i] += speeds[i];
-
-        // Reset khi ra khỏi màn hình với xác suất ngẫu nhiên
-        if (drops[i] * fontSize > canvas.height + 50) {
-          if (Math.random() > 0.96) {
-            // Tăng tỷ lệ reset để dày đặc hơn (4% chance thay vì 2.5%)
-            drops[i] = Math.random() * -50; // Reset về trên với vị trí ngẫu nhiên
-            speeds[i] = Math.random() * 0.3 + 0.4; // Giảm tốc độ để ký tự tồn tại lâu hơn
-
-            // Đổi màu ngẫu nhiên
-            const colorChoice = Math.random();
-            if (colorChoice < 0.4) {
-              colors[i] = "#00ff41";
-            } else if (colorChoice < 0.7) {
-              colors[i] = "#ffb200";
-            } else if (colorChoice < 0.85) {
-              colors[i] = "#00ccff";
-            } else {
-              colors[i] = "#ffffff";
-            }
-          }
-        }
-      }
-    }
-
-    // Tăng tốc độ refresh để mượt mà hơn
-    const interval = setInterval(draw, 25); // ~40 FPS để mượt hơn
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      // Cập nhật lại số cột khi resize
-      const newColumns = Math.floor(canvas.width / fontSize);
-      if (newColumns !== columns) {
-        // Reset arrays cho số cột mới
-        drops.length = newColumns;
-        speeds.length = newColumns;
-        colors.length = newColumns;
-
-        for (let i = columns; i < newColumns; i++) {
-          drops[i] = Math.random() * -100;
-          speeds[i] = Math.random() * 0.3 + 0.4; // Cùng tốc độ chậm hơn
-
-          const colorChoice = Math.random();
-          if (colorChoice < 0.4) {
-            colors[i] = "#00ff41";
-          } else if (colorChoice < 0.7) {
-            colors[i] = "#ffb200";
-          } else if (colorChoice < 0.85) {
-            colors[i] = "#00ccff";
-          } else {
-            colors[i] = "#ffffff";
-          }
-        }
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 opacity-30 pointer-events-none"
-      style={{ zIndex: 1 }}
-    />
-  );
-};
+// MatrixRain moved to reusable CyberBackdrop
 
 // Social media icons component with hover effects
 const SocialIcon = ({
@@ -519,8 +306,10 @@ const SocialIcon = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div
-      className="flex flex-col gap-2 md:gap-4 items-center justify-start relative shrink-0 w-12 md:w-16 lg:w-[70px] cursor-pointer group"
+    <button
+      type="button"
+      aria-label={name}
+      className="flex flex-col gap-2 md:gap-4 items-center justify-start relative shrink-0 w-12 md:w-16 lg:w-[70px] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffb200] rounded"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -535,7 +324,7 @@ const SocialIcon = ({
           }`}
         />
         <Image
-          alt=""
+          alt={name}
           src={icon}
           fill
           className="object-contain relative z-10"
@@ -557,7 +346,7 @@ const SocialIcon = ({
           {name}
         </div>
       </GlitchText>
-    </div>
+    </button>
   );
 };
 
@@ -673,6 +462,8 @@ const ProviderSlot = ({
         isHovered ? "scale-105 z-10" : ""
       } ${shouldGlitch ? "animate-glitch" : ""}`}
       onClick={() => status === "ready" && onSelect(provider.id)}
+      role="button"
+      aria-label={`Chọn nhà cái ${provider.name} tỷ lệ ${provider.percentage}%`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -702,9 +493,10 @@ const ProviderSlot = ({
       <div className="absolute inset-0">
         <div className="absolute inset-[-1%]">
           <Image
-            alt=""
+            alt="Khung provider"
             src="/assets/homepage/khung.svg"
             fill
+            sizes="(max-width: 640px) 240px, (max-width: 1024px) 220px, 250px"
             className={`object-contain transition-all duration-300 ${
               isHovered ? "filter brightness-110 drop-shadow-lg" : ""
             } ${status === "ready" ? "glow-gold" : ""}`}
@@ -769,12 +561,13 @@ const ProviderSlot = ({
           <div className="absolute inset-[36%_32%_28%_32%]">
             <div className="absolute bottom-0 left-0 right-0 top-[-4%]">
               <Image
-                alt=""
+                alt="Vòng quay đồ thị 1"
                 src="/assets/homepage/group2.svg"
                 fill
+                sizes="180px"
                 className={`object-contain transition-all duration-300 ${
                   isHovered
-                    ? "animate-spin glow-green"
+                    ? "animate-spin motion-reduce:animate-none glow-green"
                     : status === "loading"
                     ? "animate-pulse"
                     : ""
@@ -788,12 +581,13 @@ const ProviderSlot = ({
           </div>
           <div className="absolute inset-[54%_32%_28%_37%]">
             <Image
-              alt=""
+              alt="Vòng quay đồ thị 2"
               src="/assets/homepage/group3.svg"
               fill
+              sizes="160px"
               className={`object-contain transition-all duration-300 ${
                 isHovered
-                  ? "animate-bounce glow-cyan"
+                  ? "animate-bounce motion-reduce:animate-none glow-cyan"
                   : status === "loading"
                   ? "animate-pulse"
                   : ""
@@ -811,9 +605,10 @@ const ProviderSlot = ({
       <div className="absolute left-[4%] bottom-[10%] right-[4%] h-4">
         <div className="relative w-full h-full">
           <Image
-            alt=""
+            alt="Thanh tiến trình tải"
             src="/assets/homepage/group1788.svg"
             fill
+            sizes="(max-width: 640px) 280px, (max-width: 1024px) 360px, 420px"
             className="object-contain"
           />
           {/* Animated progress overlay */}
@@ -896,17 +691,20 @@ export function HomepageScreen({
   onRegister,
 }: HomepageScreenProps) {
   const { isAuthenticated, user, logout } = useAuth();
-  const [isClient, setIsClient] = useState(false);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(true);
-  const [showPointsModal, setShowPointsModal] = useState(false);
-
+  // Ensure SSR and client initial render match; then reconcile from sessionStorage on mount
   useEffect(() => {
-    setIsClient(true);
-    // Hide loading overlay after 3 seconds
-    const timer = setTimeout(() => {
-      setShowLoadingOverlay(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    if (typeof window !== "undefined") {
+      const done = sessionStorage.getItem("initDone");
+      if (done === "1") {
+        setShowLoadingOverlay(false);
+      }
+    }
+  }, []);
+  const [showPointsModal, setShowPointsModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   const handleProviderSelect = (providerId: string) => {
@@ -933,8 +731,8 @@ export function HomepageScreen({
 
   return (
     <div className="bg-black relative min-h-screen w-full overflow-hidden">
-      {/* Matrix Rain Background */}
-      <MatrixRain />
+      {/* Matrix Rain Background (reusable + performant) */}
+      <CyberBackdrop variant="matrix" opacity={0.28} fpsCap={40} />
 
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#ff940608] via-[#ff940620] to-[#ff940608]" />
@@ -957,6 +755,11 @@ export function HomepageScreen({
 
       {/* Decorative Background Pattern */}
       <div className="absolute left-0 top-[100px] w-full h-full">
+        {/* 3D-like Parallax hero */}
+        <ParallaxCyberHero
+          className="absolute inset-x-0 top-0 h-[420px]"
+          intensity={0.55}
+        />
         <div
           className="absolute bg-gradient-to-t bg-repeat from-[#00000000] from-[50%] h-[410px] left-0 opacity-10 to-[#000000] top-[670px] w-full animate-pulse"
           style={{
@@ -981,11 +784,66 @@ export function HomepageScreen({
       {/* Footer Group */}
       <div className="absolute bottom-0 left-0 right-0 h-[12%]">
         <Image
-          alt=""
+          alt="Chân trang nền cyber"
           src="/assets/homepage/group.svg"
           fill
+          sizes="100vw"
           className="object-contain opacity-80"
         />
+      </div>
+
+      {/* Coding by @Jonh0798 Footer */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 pb-2">
+        <div className="flex items-center justify-end px-4 lg:px-[100px] xl:px-[120px] 2xl:px-[150px]">
+          <div className="relative group">
+            {/* Glowing border effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00ff41] via-[#ffb200] to-[#00ccff] rounded-lg blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
+
+            {/* Main container */}
+            <div className="relative bg-black/80 backdrop-blur-md border border-[#00ff41]/30 rounded-lg px-3 py-1.5 group-hover:border-[#00ff41]/60 transition-all duration-300 group-hover:scale-105">
+              {/* Matrix-style text effect */}
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 bg-[#00ff41] rounded-full animate-pulse" />
+                <GlitchText>
+                  <span className="font-['Chakra_Petch'] text-[10px] text-[#00ff41] tracking-wider uppercase">
+                    Coding by
+                  </span>
+                </GlitchText>
+                <div
+                  className="w-1.5 h-1.5 bg-[#ffb200] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.5s" }}
+                />
+                <GlitchText>
+                  <span
+                    className="font-['Big_Shoulders_Display'] font-bold text-xs text-[#ffb200] tracking-wider hover:text-[#00ccff] transition-colors duration-300 cursor-pointer"
+                    style={{
+                      textShadow: "0 0 8px #ffb20080",
+                      filter: "drop-shadow(0 0 4px #ffb20060)",
+                    }}
+                  >
+                    @Jonh0798
+                  </span>
+                </GlitchText>
+                <div
+                  className="w-1.5 h-1.5 bg-[#00ccff] rounded-full animate-pulse"
+                  style={{ animationDelay: "1s" }}
+                />
+              </div>
+
+              {/* Scanning line effect */}
+              <div className="absolute inset-0 overflow-hidden rounded-lg pointer-events-none">
+                <div
+                  className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-[#00ff41] to-transparent animate-scan-line opacity-40"
+                  style={{
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    animationDuration: "2s",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Enhanced Header - Responsive */}
@@ -1036,9 +894,10 @@ export function HomepageScreen({
                     <div className="absolute inset-0">
                       <div className="absolute inset-[-15%_-4%] lg:inset-[-15.38%_-4%]">
                         <Image
-                          alt=""
+                          alt="Khung nút admin"
                           src="/assets/homepage/frame.svg"
                           fill
+                          sizes="(max-width: 1024px) 120px, 150px"
                           className="object-contain group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
@@ -1059,9 +918,10 @@ export function HomepageScreen({
                   <div className="absolute inset-0">
                     <div className="absolute inset-[-15%_-4%] lg:inset-[-15.38%_-4%]">
                       <Image
-                        alt=""
+                        alt="Khung nút đăng xuất"
                         src="/assets/homepage/frame1.svg"
                         fill
+                        sizes="(max-width: 1024px) 140px, 180px"
                         className="object-contain group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
@@ -1084,9 +944,10 @@ export function HomepageScreen({
                 <div className="absolute inset-0">
                   <div className="absolute inset-[-15%_-4%] lg:inset-[-15.38%_-4%]">
                     <Image
-                      alt=""
+                      alt="Khung nút đăng nhập"
                       src="/assets/homepage/frame.svg"
                       fill
+                      sizes="(max-width: 1024px) 160px, 220px"
                       className="object-contain group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -1105,9 +966,10 @@ export function HomepageScreen({
               >
                 <div className="absolute inset-0">
                   <Image
-                    alt=""
+                    alt="Khung nút đăng ký"
                     src="/assets/homepage/frame1.svg"
                     fill
+                    sizes="(max-width: 1024px) 160px, 220px"
                     className="object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
@@ -1215,102 +1077,20 @@ export function HomepageScreen({
       </div>
 
       {/* Loading overlay for initial load */}
-      {showLoadingOverlay && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
-          role="status"
-          aria-live="polite"
-          aria-busy="true"
-        >
-          <div className="relative flex flex-col items-center text-center">
-            {/* Glow nền nhẹ */}
-            <div
-              className="pointer-events-none absolute -inset-16 blur-3xl opacity-40"
-              style={{
-                background:
-                  "radial-gradient(50% 50% at 50% 50%, #ffb20033 0%, #00ff4126 35%, transparent 70%)",
-              }}
-            />
-
-            {/* Spinner nâng cấp */}
-            <div className="relative mb-8 grid place-items-center">
-              {/* Vòng nền mờ */}
-              <div className="w-24 h-24 rounded-full border border-white/10 bg-black/40 backdrop-blur" />
-
-              {/* Vòng gradient conic (vòng ngoài) */}
-              <div
-                className="absolute w-24 h-24 rounded-full motion-reduce:animate-none"
-                style={{
-                  backgroundImage:
-                    "conic-gradient(from 0deg, #ffb200, #ffb20088 25%, transparent 25%, transparent 75%, #ffb20088 75%, #ffb200)",
-                  WebkitMask:
-                    "radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0)",
-                  animation: "spin 0.5s linear infinite",
-                  filter: "drop-shadow(0 0 8px #ffb200aa)",
-                }}
-              />
-
-              {/* Vòng giữa màu xanh, quay ngược chiều */}
-              <div
-                className="absolute w-20 h-20 rounded-full motion-reduce:animate-none"
-                style={{
-                  backgroundImage:
-                    "conic-gradient(from 0deg, #00ff41, #00ff4188 25%, transparent 25%, transparent 75%, #00ff4188 75%, #00ff41)",
-                  WebkitMask:
-                    "radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0)",
-                  animation: "spinReverse 0.5s linear infinite",
-                  filter: "drop-shadow(0 0 8px #00ff41aa)",
-                }}
-              />
-
-              {/* Vòng trong mỏng, tốc độ gấp đôi để tạo cảm giác “công nghệ” */}
-              <div
-                className="absolute w-14 h-14 rounded-full motion-reduce:animate-none"
-                style={{
-                  backgroundImage:
-                    "conic-gradient(from 0deg, #ffffff, #ffffff55 20%, transparent 20%, transparent 80%, #ffffff55 80%, #ffffff)",
-                  WebkitMask:
-                    "radial-gradient(farthest-side, transparent calc(100% - 4px), #000 0)",
-                  animation: "spin 0.25s linear infinite",
-                  opacity: 0.7,
-                }}
-              />
-
-              {/* Chấm chỉ hướng (indicator) */}
-              <span
-                className="absolute -top-1 w-2 h-2 rounded-full"
-                style={{
-                  background: "#ffb200",
-                  boxShadow: "0 0 10px #ffb200, 0 0 20px #ffb200",
-                }}
-              />
-            </div>
-
-            {/* Text trung tâm */}
-            <div className="space-y-2">
-              <div className="text-2xl font-bold tracking-wide text-[#ffb200] drop-shadow">
-                INITIALIZING SYSTEM...
-              </div>
-              <div className="font-mono text-sm text-[#00ff41] opacity-90">
-                Connecting to gaming servers...
-              </div>
-            </div>
-          </div>
-
-          {/* Keyframes cho spin */}
-          <style jsx>{`
-            @keyframes spin {
-              to {
-                transform: rotate(360deg);
-              }
+      {mounted && showLoadingOverlay && (
+        <SystemInitializationOverlay
+          isOpen={showLoadingOverlay}
+          totalDurationMs={8000}
+          performanceMode="balanced"
+          maxLogs={36}
+          fpsCap={30}
+          onDone={() => {
+            if (typeof window !== "undefined") {
+              sessionStorage.setItem("initDone", "1");
             }
-            @keyframes spinReverse {
-              to {
-                transform: rotate(-360deg);
-              }
-            }
-          `}</style>
-        </div>
+            setShowLoadingOverlay(false);
+          }}
+        />
       )}
 
       {/* Points Required Modal */}

@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { getDatabase } from "../../../../../lib/mongodb";
-import { User, UserProfile } from "../../../../../lib/auth-schemas";
-import { verifyToken } from "../../../../../lib/auth-utils";
+import { getDatabase } from "@/lib/mongodb";
+import { User, UserProfile } from "@/lib/auth-schemas";
+import { verifyToken } from "@/lib/auth-utils";
 import { ObjectId } from "mongodb";
+import { runtimeCache } from "@/lib/cache";
 
 export async function GET(request: NextRequest) {
   try {
+    // Admin list endpoints can be cached briefly for UX on pagination/search
+    request.headers.set(
+      "Cache-Control",
+      "private, max-age=15, stale-while-revalidate=60"
+    );
     // Get token from Authorization header
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -83,16 +89,23 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    // Get total count
-    const total = await usersCollection.countDocuments(searchQuery);
-
-    // Get users with pagination
-    const users = await usersCollection
-      .find(searchQuery)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .toArray();
+    const cacheKey = `adminUsers:${page}:${limit}:${search}`;
+    const cached = runtimeCache.get<{ users: User[]; total: number }>(cacheKey);
+    let users: User[];
+    let total: number;
+    if (cached) {
+      users = cached.users;
+      total = cached.total;
+    } else {
+      total = await usersCollection.countDocuments(searchQuery);
+      users = await usersCollection
+        .find(searchQuery)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .toArray();
+      runtimeCache.set(cacheKey, { users, total }, 20_000);
+    }
 
     // Convert to UserProfile (without password)
     const userProfiles: UserProfile[] = users.map((user) => ({
@@ -119,7 +132,12 @@ export async function GET(request: NextRequest) {
         },
         error: null,
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "private, max-age=15, stale-while-revalidate=60",
+        },
+      }
     );
   } catch (error) {
     console.error("Admin get users error:", error);

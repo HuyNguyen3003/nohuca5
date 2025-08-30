@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDatabase } from "../../../../../lib/mongodb";
+import { getDatabase } from "@/lib/mongodb";
 import {
   loginSchema,
   User,
   UserProfile,
-} from "../../../../../lib/auth-schemas";
-import { verifyPassword, generateToken } from "../../../../../lib/auth-utils";
+} from "@/lib/auth-schemas";
+import { verifyPassword, generateToken } from "@/lib/auth-utils";
 
 export async function POST(request: NextRequest) {
   try {

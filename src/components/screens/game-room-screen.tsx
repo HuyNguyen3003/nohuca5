@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import { GamingButton } from "@/components/ui/gaming-button";
-import { ArrowLeft } from "lucide-react";
+import AppBar from "@/components/ui/app-bar";
 import AdvancedCyberChart from "@/components/ui/AdvancedCyberChart";
 import {
   getGamesByProvider,
@@ -23,13 +23,10 @@ export function GameRoomScreen({
   onPredict,
   onBack,
 }: GameRoomScreenProps) {
-  const [filtered, setFiltered] = useState<ProviderGame[]>([]);
-
-  useEffect(() => {
+  const filtered = useMemo<ProviderGame[]>(() => {
     const data = providerId ? getGamesByProvider(providerId) : [];
     const fallback = Object.values(providerToGames).flat().slice(0, 20);
-    const list = data && data.length > 0 ? data : fallback;
-    setFiltered(list);
+    return data && data.length > 0 ? data : fallback;
   }, [providerId]);
 
   return (
@@ -47,55 +44,35 @@ export function GameRoomScreen({
         <div className="absolute inset-0 bg-gradient-to-r from-yellow-900/0 via-yellow-900/10 to-yellow-900/0 animate-pulse" />
       </div>
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-yellow-400/20 bg-black/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 items-center justify-between px-4 md:h-20 md:px-8">
-          <div className="flex items-center gap-3">
-            <GamingButton variant="ghost" size="icon" onClick={onBack}>
-              <ArrowLeft className="w-5 h-5" />
-            </GamingButton>
-            <div>
-              <h1 className="text-xl md:text-2xl font-black tracking-wider">
-                <span className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                  {providerId?.toUpperCase()}
-                </span>
-              </h1>
-              <div className="mt-1 h-px w-24 bg-gradient-to-r from-yellow-400/70 to-transparent" />
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center gap-3 font-mono text-xs text-yellow-400/70">
-            <span className="inline-flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              SECURE.LINK/ACTIVE
-            </span>
-            <span className="h-3 w-px bg-yellow-400/30" />
-            <span>v2.2.0</span>
-            {/* Cyber Chart */}
+      <AppBar
+        onBack={onBack}
+        title={(providerId || "Provider").toUpperCase()}
+        rightSlot={
+          <div className="hidden md:flex items-center gap-3 font-mono text-xs text-yellow-400/70 select-none">
             <div className="mt-3 relative">
               <AdvancedCyberChart
-                percentage={100}
-                width={200}
-                height={80}
-                duration={3000}
+                width={600}
+                height={60}
+                duration={2600}
                 primaryColor="#ff6600"
                 secondaryColor="#ff4400"
                 showGrid={true}
                 showLabels={true}
                 showParticles={true}
-                animationType="ease"
-                dataPoints={50}
-                volatility={0.25}
+                animationType="elastic"
+                dataPoints={42}
+                volatility={0.22}
               />
             </div>
           </div>
-        </div>
-      </header>
+        }
+      />
 
       {/* Grid */}
       <main className="relative z-10 mx-auto max-w-[1400px] px-4 py-8 md:px-8 md:py-12">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {filtered.map((game) => (
-            <GameCard
+            <MemoGameCard
               key={game.id}
               game={game}
               onPredict={() => onPredict?.(game.id)}
@@ -125,8 +102,35 @@ function GameCard({
   onPredict: () => void;
 }) {
   return (
-    <div className="group relative w-full max-w-[380px] mx-auto">
-      <div className="relative h-[320px] w-full overflow-hidden rounded-xl border border-yellow-400/30 bg-gradient-to-br from-gray-900/90 via-black/90 to-gray-800/90 shadow-[0_0_30px_rgba(234,179,8,0.12)] backdrop-blur-sm transition-all duration-500 group-hover:shadow-[0_0_60px_rgba(234,179,8,0.28)] group-hover:border-yellow-400/60">
+    <div
+      className="group relative w-full max-w-[380px] mx-auto"
+      onClick={onPredict}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onPredict();
+        }
+      }}
+    >
+      <div className="relative h-[280px] sm:h-[320px] w-full overflow-hidden rounded-lg border border-yellow-400/25 bg-gradient-to-br from-gray-900/90 via-black/90 to-gray-800/90 shadow-[0_0_18px_rgba(234,179,8,0.12)] backdrop-blur-sm transition-all duration-300 ease-out group-hover:shadow-[0_0_70px_rgba(234,179,8,0.35)] group-hover:border-yellow-400/60 group-hover:-translate-y-1.5 group-hover:scale-[1.015] will-change-transform">
+        {/* Outer neon glow */}
+        <span
+          className="pointer-events-none absolute -inset-px rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            boxShadow:
+              "0 0 28px rgba(234,179,8,0.38), inset 0 0 12px rgba(234,179,8,0.22)",
+          }}
+        />
+        {/* Animated border sweep */}
+        <span
+          className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent opacity-0 group-hover:opacity-100"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
+          }}
+        />
         {/* Background grid */}
         <div className="absolute inset-0 opacity-10">
           <div
@@ -158,14 +162,16 @@ function GameCard({
         </span>
 
         {/* Game image in hex-like frame */}
-        <div className="absolute left-1/2 top-6 -translate-x-1/2">
-          <div className="relative h-24 w-24 rounded-lg border-2 border-yellow-400/40 bg-black/30 grid place-items-center shadow-md group-hover:scale-105 transition-transform">
+        <div className="absolute left-1/2 top-4 sm:top-6 -translate-x-1/2">
+          <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-lg border-2 border-yellow-400/40 bg-black/30 grid place-items-center shadow-md group-hover:scale-[1.04] transition-transform will-change-transform">
             <Image
               src={game.image}
               alt={game.name}
               width={64}
               height={64}
               className="object-contain drop-shadow-md"
+              loading="lazy"
+              sizes="96px"
             />
             {/* subtle glow ring */}
             <span
@@ -175,37 +181,39 @@ function GameCard({
           </div>
         </div>
 
-        {/* Title and percentage */}
-        <div className="absolute left-4 right-4 top-[120px] flex items-center justify-between gap-3">
+        {/* Title and description */}
+        <div className="absolute left-4 right-4 top-[120px] sm:top-[130px] flex items-center justify-between gap-3">
           <div className="w-full pr-3 break-words">
-            <h3 className="text-white font-black tracking-wider text-lg mb-1">
+            <h3 className="text-white font-black tracking-wider text-lg mb-1 line-clamp-2">
               {game.name}
             </h3>
             <div>
-              <div className="text-xs font-mono text-yellow-400/80">
+              <div className="text-xs font-mono text-yellow-400/80 line-clamp-2">
                 {game.description}
               </div>
             </div>
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="absolute left-1/2 bottom-5 -translate-x-1/2 mt-4 pt-4">
+        {/* CTA - pulled closer to description */}
+        <div className="absolute left-1/2 bottom-10 -translate-x-1/2 pt-2 pointer-events-none">
           <GamingButton
             variant="gold"
             size="sm"
             className="px-5"
-            onClick={onPredict}
+            aria-label={`Phân tích ${game.name}`}
           >
             Phân tích
           </GamingButton>
         </div>
 
         {/* Hover scan line */}
-        <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-all" />
+        <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity" />
         {/* subtle bottom glow */}
-        <div className="pointer-events-none absolute inset-x-6 bottom-0 h-10 bg-gradient-to-t from-yellow-500/10 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-6 bottom-0 h-12 bg-gradient-to-t from-yellow-500/15 to-transparent" />
       </div>
     </div>
   );
 }
+
+const MemoGameCard = React.memo(GameCard);

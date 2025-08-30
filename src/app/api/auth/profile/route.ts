@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { getDatabase } from "../../../../../lib/mongodb";
-import { User, UserProfile } from "../../../../../lib/auth-schemas";
-import { verifyToken } from "../../../../../lib/auth-utils";
+import { getDatabase } from "@/lib/mongodb";
+import { User, UserProfile } from "@/lib/auth-schemas";
+import { verifyToken } from "@/lib/auth-utils";
 import { ObjectId } from "mongodb";
+import { runtimeCache } from "@/lib/cache";
 
 export async function GET(request: NextRequest) {
   try {
+    // Cache hint for CDN/proxy while keeping authorization dynamic payloads non-stale per-user.
+    // Short SWR allows quick repeat views on the same user.
+    request.headers.set(
+      "Cache-Control",
+      "private, max-age=30, stale-while-revalidate=120"
+    );
     // Get token from Authorization header
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -39,15 +46,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Connect to database
-    const db = await getDatabase();
-    const usersCollection = db.collection<User>("users");
-
-    // Find user
-    const user = await usersCollection.findOne({
-      _id: new ObjectId(decoded.userId) as any,
-      isActive: true,
-    });
+    // Try cache first (scoped by userId)
+    const cacheKey = `profile:${decoded.userId}`;
+    let user: User | null | undefined = runtimeCache.get<User>(cacheKey);
+    if (!user) {
+      const db = await getDatabase();
+      const usersCollection = db.collection<User>("users");
+      user = await usersCollection.findOne({
+        _id: new ObjectId(decoded.userId) as any,
+        isActive: true,
+      });
+      if (user) runtimeCache.set(cacheKey, user, 30_000);
+    }
 
     if (!user) {
       return NextResponse.json(
@@ -79,7 +89,12 @@ export async function GET(request: NextRequest) {
         data: userProfile,
         error: null,
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "private, max-age=30, stale-while-revalidate=120",
+        },
+      }
     );
   } catch (error) {
     console.error("Get profile error:", error);
