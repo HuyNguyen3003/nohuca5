@@ -46,6 +46,7 @@ export function PlasmaEnergyField({
       for (let i = 0; i < 360; i += 2) {
         const angle = (i * Math.PI) / 180;
         const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
 
         const plasmaValue = Math.sin(time + i * 0.1) * 0.5 + 0.5;
         const energyHeight = (energyLevel / 100) * radius * 2;

@@ -39,9 +39,7 @@ export function CyberChart3D({
       setScanLinePosition((prev) => (prev + 1) % 100);
     }, 100);
 
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [showScanLines]);
 
   // Particle system for bars
@@ -94,7 +92,7 @@ export function CyberChart3D({
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
-      particles.forEach((particle) => {
+      particles.forEach((particle, index) => {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
@@ -126,6 +124,7 @@ export function CyberChart3D({
     animate();
   }, [data, width, height, showParticles, intensity]);
 
+  const barWidth = width / data.length;
   const maxValue = Math.max(...data.map((d) => d.value));
 
   return (

@@ -40,7 +40,7 @@ export function BetAmountGrid3D({
   const gridRef = useRef<HTMLDivElement>(null);
   const particleIdRef = useRef(0);
 
-  const { triggerGlitch } = useGlitchEffect({
+  const { glitchStyles, triggerGlitch } = useGlitchEffect({
     intensity: "medium",
     frequency: 2000,
     duration: 150,
@@ -97,9 +97,7 @@ export function BetAmountGrid3D({
       );
     }, 16);
 
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [explosionParticles]);
 
   // Handle amount toggle

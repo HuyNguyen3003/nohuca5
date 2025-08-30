@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { UserProfile } from "./auth-schemas";
@@ -31,14 +32,9 @@ export function generateToken(user: UserProfile): string {
 }
 
 // Verify JWT token
-export function verifyToken(
-  token: string
-): { userId: string; username: string } | null {
+export function verifyToken(token: string): any {
   try {
-    return jwt.verify(token, JWT_SECRET) as {
-      userId: string;
-      username: string;
-    };
+    return jwt.verify(token, JWT_SECRET);
   } catch {
     return null;
   }

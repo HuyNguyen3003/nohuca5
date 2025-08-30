@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { use3DPerspective } from "@/hooks/use3DPerspective";
+import { useCyberAnimation } from "@/hooks/useCyberAnimation";
 
 interface FloatingElement {
   id: number;
@@ -35,11 +36,17 @@ export function FloatingElements({
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
 
-  const { get3DStyles } = use3DPerspective({
+  const { get3DStyles, getFloatingStyles } = use3DPerspective({
     intensity,
     enableMouseTracking: false,
     enableParallax: false,
     depth: 30, // Reduced for ultra smooth
+  });
+
+  const { getCyberEffects } = useCyberAnimation({
+    type: "pulse",
+    intensity,
+    enabled: false, // Disabled for ultra smooth performance
   });
 
   // Initialize floating elements
@@ -114,7 +121,6 @@ export function FloatingElements({
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
-        animationRef.current = 0;
       }
     };
   }, [enabled]);

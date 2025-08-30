@@ -6,7 +6,7 @@ import { GamingCard } from "@/components/ui/gaming-card";
 import { GamingButton } from "@/components/ui/gaming-button";
 import { BackButton } from "@/components/ui";
 import { useAuth } from "@/hooks/useAuth";
-
+import AdvancedCyberChart from "@/components/ui/AdvancedCyberChart";
 import { SystemInitializationOverlay } from "@/components/ui/SystemInitializationOverlay";
 import { CyberBackground } from "@/components/ui/CyberBackground";
 import { CyberTimer3D } from "@/components/ui/CyberTimer3D";
@@ -38,9 +38,7 @@ function useHcmClock() {
   useEffect(() => {
     // render mỗi giây để UI cập nhật, không đọc lại system time
     const id = setInterval(() => forceTick((n) => n + 1), 1000);
-    return () => {
-      clearInterval(id);
-    };
+    return () => clearInterval(id);
   }, []);
 
   // tính "bây giờ" = mốc ban đầu + thời gian trôi qua
@@ -71,13 +69,13 @@ function useHcmClock() {
 
 export function GamePlayScreen({ onBack }: GamePlayScreenProps) {
   const { user, adjustPoints } = useAuth();
-
+  const [prediction] = useState<"up" | "down">("up");
   const [selectedBetAmounts, setSelectedBetAmounts] = useState<number[]>([
     1000,
   ]);
 
   // 3D Perspective and Animation hooks with ultra smooth optimization
-  const { get3DStyles } = use3DPerspective({
+  const { get3DStyles, getDepthLayers } = use3DPerspective({
     intensity: "low", // Ultra smooth performance
     enableMouseTracking: true,
     enableParallax: false, // Disabled for better performance
@@ -271,6 +269,17 @@ export function GamePlayScreen({ onBack }: GamePlayScreenProps) {
     const latencyMs = Math.round(rnd(15, 80, 4)); // Faster response time
 
     // Diverse market conditions
+    const marketConditions = [
+      "bullish",
+      "bearish",
+      "volatile",
+      "stable",
+      "trending",
+      "sideways",
+      "breakout",
+      "consolidation",
+    ];
+    const selectedCondition = pick(marketConditions, 5);
 
     // Generate diverse amount ranges based on selected bet amounts
     const genAmountRange = (base: number, i: number) => {

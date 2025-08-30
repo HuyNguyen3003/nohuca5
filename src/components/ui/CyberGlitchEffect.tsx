@@ -44,9 +44,7 @@ export function CyberGlitchEffect({
       intensity === "high" ? 2000 : intensity === "medium" ? 4000 : 8000
     );
 
-    return () => {
-      clearInterval(glitchInterval);
-    };
+    return () => clearInterval(glitchInterval);
   }, [intensity]);
 
   useEffect(() => {
@@ -54,7 +52,7 @@ export function CyberGlitchEffect({
       const glitchChars = "!@#$%^&*()_+-=[]{}|;:,.<>?";
       const glitchedText = originalText
         .split("")
-        .map((char) => {
+        .map((char, index) => {
           if (Math.random() > 0.7) {
             return glitchChars[Math.floor(Math.random() * glitchChars.length)];
           }

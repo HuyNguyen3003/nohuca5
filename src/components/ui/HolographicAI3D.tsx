@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface HolographicAI3DProps {
@@ -22,6 +22,84 @@ export function HolographicAI3D({
 }: HolographicAI3DProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [particles, setParticles] = useState<
+    Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      life: number;
+      maxLife: number;
+    }>
+  >([]);
+
+  // Generate particles
+  useEffect(() => {
+    const newParticles = Array.from({ length: 50 }, () => ({
+      x: Math.random() * 200,
+      y: Math.random() * 200,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+      life: Math.random() * 100,
+      maxLife: 100,
+    }));
+    setParticles(newParticles);
+  }, []);
+
+  // Animate particles
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update and draw particles
+      setParticles((prev) =>
+        prev.map((particle) => {
+          const newParticle = {
+            ...particle,
+            x: particle.x + particle.vx,
+            y: particle.y + particle.vy,
+            life: particle.life - 1,
+          };
+
+          if (newParticle.life > 0) {
+            const alpha = newParticle.life / newParticle.maxLife;
+            ctx.fillStyle = `rgba(255, 140, 0, ${alpha})`;
+            ctx.beginPath();
+            ctx.arc(newParticle.x, newParticle.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          return newParticle;
+        })
+      );
+
+      // Reset particles that are dead
+      setParticles((prev) =>
+        prev.map((particle) =>
+          particle.life <= 0
+            ? {
+                x: Math.random() * 200,
+                y: Math.random() * 200,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                life: Math.random() * 100,
+                maxLife: 100,
+              }
+            : particle
+        )
+      );
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  }, []);
 
   const getRiskColor = () => {
     switch (riskLevel) {

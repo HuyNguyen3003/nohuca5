@@ -19,6 +19,7 @@ type Screen =
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("homepage");
   const [selectedGame, setSelectedGame] = useState<string>("");
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
 
   const handleLogin = () => {
     setCurrentScreen("login");
@@ -38,7 +39,8 @@ export default function Home() {
     setCurrentScreen("gameRoom");
   };
 
-  const handleRoomSelect = () => {
+  const handleRoomSelect = (roomId: string) => {
+    setSelectedRoom(roomId);
     setCurrentScreen("gamePlay");
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CyberWaveChart3DProps {
@@ -16,8 +16,117 @@ export function CyberWaveChart3D({
 }: CyberWaveChart3DProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [particles, setParticles] = useState<
+    Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      life: number;
+      maxLife: number;
+      type: "energy" | "danger" | "data";
+    }>
+  >([]);
+
+  // Generate particles
+  useEffect(() => {
+    const newParticles = Array.from({ length: 30 }, () => ({
+      x: Math.random() * 300,
+      y: Math.random() * 100,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+      life: Math.random() * 100,
+      maxLife: 100,
+      type:
+        Math.random() > 0.7
+          ? "danger"
+          : Math.random() > 0.5
+          ? "energy"
+          : "data",
+    }));
+    setParticles(newParticles);
+  }, []);
+
+  // Animate particles
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update and draw particles
+      setParticles((prev) =>
+        prev.map((particle) => {
+          const newParticle = {
+            ...particle,
+            x: particle.x + particle.vx,
+            y: particle.y + particle.vy,
+            life: particle.life - 1,
+          };
+
+          if (newParticle.life > 0) {
+            const alpha = newParticle.life / newParticle.maxLife;
+            let color = "";
+            let size = 2;
+
+            switch (particle.type) {
+              case "danger":
+                color = `rgba(255, 0, 0, ${alpha})`;
+                size = 3;
+                break;
+              case "energy":
+                color = `rgba(255, 255, 0, ${alpha})`;
+                size = 2;
+                break;
+              default:
+                color = `rgba(0, 255, 255, ${alpha})`;
+                size = 1;
+            }
+
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(newParticle.x, newParticle.y, size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          return newParticle;
+        })
+      );
+
+      // Reset particles that are dead
+      setParticles((prev) =>
+        prev.map((particle) =>
+          particle.life <= 0
+            ? {
+                x: Math.random() * 300,
+                y: Math.random() * 100,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                life: Math.random() * 100,
+                maxLife: 100,
+                type:
+                  Math.random() > 0.7
+                    ? "danger"
+                    : Math.random() > 0.5
+                    ? "energy"
+                    : "data",
+              }
+            : particle
+        )
+      );
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  }, []);
 
   const generateWavePoints = () => {
+    const accuracy = predictionAccuracy ?? 85;
     const waveH = waveHeight ?? 15;
     const points = [];
 

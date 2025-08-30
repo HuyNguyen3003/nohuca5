@@ -759,7 +759,9 @@ export function HomepageScreen({
         <ParallaxCyberHero
           className="absolute inset-x-0 top-0 h-[420px]"
           intensity={0.55}
-        />
+        >
+          <div className="w-full h-full" />
+        </ParallaxCyberHero>
         <div
           className="absolute bg-gradient-to-t bg-repeat from-[#00000000] from-[50%] h-[410px] left-0 opacity-10 to-[#000000] top-[670px] w-full animate-pulse"
           style={{

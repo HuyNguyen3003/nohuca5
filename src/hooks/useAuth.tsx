@@ -75,8 +75,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         setToken(null);
       }
-    } catch {
-      // Log error silently in production
+    } catch (error) {
+      console.error("Check auth error:", error);
       authStorage.clearAuth();
       setUser(null);
       setToken(null);
@@ -112,6 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       }
     } catch (error) {
+      console.error("Login error:", error);
       return {
         success: false,
         error: "Lỗi kết nối, vui lòng thử lại",
@@ -146,6 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       }
     } catch (error) {
+      console.error("Register error:", error);
       return {
         success: false,
         error: "Lỗi kết nối, vui lòng thử lại",
@@ -192,7 +194,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return nextPoints;
         }
         return null;
-      } catch {
+      } catch (e) {
+        console.error("adjustPoints error", e);
         return null;
       }
     },

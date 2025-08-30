@@ -158,7 +158,7 @@ export function useCyberAnimation(options: CyberAnimationOptions = {}) {
     const next = keyframes[nextFrame];
 
     // Interpolate values
-    const interpolated: Record<string, number> = {};
+    const interpolated: any = {};
     Object.keys(current).forEach((key) => {
       const currentValue = current[key as keyof typeof current];
       const nextValue = next[key as keyof typeof next];
@@ -203,7 +203,7 @@ export function useCyberAnimation(options: CyberAnimationOptions = {}) {
   const getCyberEffects = useCallback(() => {
     if (!state.isAnimating) return {};
 
-    const effects: Record<string, string> = {};
+    const effects: any = {};
 
     switch (type) {
       case "entrance":
